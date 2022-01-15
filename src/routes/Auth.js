@@ -25,6 +25,7 @@ const Auth = () => {
     try {
       let data;
       let auth = authService.getAuth();
+      // const auth = getAuth(firebaseApp);
       if (newAccount) {
         data = await authService.createUserWithEmailAndPassword(
           auth,
