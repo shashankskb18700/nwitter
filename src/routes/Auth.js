@@ -1,30 +1,54 @@
 import React, { useState } from "react";
+import { authService } from "../fbase";
+
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [newAccount, setNewAccount] = useState(true);
 
   const onChange = (event) => {
-    console.log(event.target.type);
+    // console.log(event.target.type);
     const {
-      target: { type, value },
+      target: { name, value },
     } = event;
 
-    if (type === "email") {
+    if (name === "email") {
       setEmail(value);
-    } else if (type === "password") {
+    } else if (name === "password") {
       setPassword(value);
     }
   };
 
-  const onSubmit = (event) => {
-    console.log("preventing default  s");
+  const onSubmit = async (event) => {
     event.preventDefault();
+
+    try {
+      let data;
+      let auth = authService.getAuth();
+      if (newAccount) {
+        data = await authService.createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+      } else {
+        data = await authService.signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+      }
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div>
       <form onSubmit={onSubmit}>
         <div>
           <input
+            name="email"
             type="email"
             placeholder="email"
             required
@@ -32,13 +56,17 @@ const Auth = () => {
             value={email}
           />
           <input
+            name="password"
             type="password"
             placeholder="password"
             required
             value={password}
             onChange={onChange}
           />
-          <input type="button" value="submit" />
+          <input
+            type="submit"
+            value={newAccount ? "create account" : "login"}
+          />
         </div>
         <div>
           <button>continue with google</button>

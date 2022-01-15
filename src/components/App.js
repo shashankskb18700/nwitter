@@ -6,7 +6,7 @@ import { authService } from "../fbase";
 function App() {
   // const a = fbase.console.log(a);
 
-  // console.log(firebase);
+  // console.log(authService.currentUser);
   const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser);
   return (
     <div>
